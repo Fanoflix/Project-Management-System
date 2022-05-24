@@ -1,0 +1,17 @@
+[
+  {
+    "surveyResponseId": 1,
+    "questionId": 1,
+    "answerText": "Folio3"
+  },
+  {
+    "surveyResponseId": 1,
+    "questionId": 2,
+    "answerText": "Associate Software Engineer"
+  },
+  {
+    "surveyResponseId": 1,
+    "questionId": 3,
+    "answerChoiceText": "Mandatory onsite number of days, and optional work from home for the rest"
+  }
+]

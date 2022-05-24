@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("LOCAL_DATABASE_URL")
+}
+
+// ____> Schema
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+
+  projects Project[]
+  
+}
+
+model Project {
+  id           Int    @id @default(autoincrement())
+  adminId      Int
+  supervisorId Int?
+  name         String
+  description  String
+
+  users     User[]
+  posts     Post[]
+  workItems WorkItem[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  projectId Int?
+  topic     String
+  content   String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  project   Project? @relation(fields: [projectId], references: [id])
+
+  workItems WorkItem[]
+}
+
+model WorkItem {
+  id           Int    @id @default(autoincrement())
+  projectId    Int?
+  postId       Int?
+  originalName String
+  mimetype     String
+  filename     String
+  path         String
+  size         BigInt
+
+  post    Post?    @relation(fields: [postId], references: [id])
+  project Project? @relation(fields: [projectId], references: [id])
+}

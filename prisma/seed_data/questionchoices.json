@@ -1,0 +1,18 @@
+[
+  {
+    "questionId": 3,
+    "choiceText": "Onsite"
+  },
+  {
+    "questionId": 3,
+    "choiceText": "Work from home"
+  },
+  {
+    "questionId": 3,
+    "choiceText": "Flexible"
+  },
+  {
+    "questionId": 3,
+    "choiceText": "Mandatory onsite number of days, and optional work from home for the rest"
+  }
+]

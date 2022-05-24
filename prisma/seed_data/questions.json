@@ -1,0 +1,33 @@
+[
+  {
+    "surveyId": 1,
+    "title": "Which company do you work for?",
+    "subtext": "If you are not currently employed, please enter your previous employer.",
+    "type": "text",
+    "required": true
+  },
+  {
+    "surveyId": 1,
+    "title": "What is your job title?",
+    "type": "text",
+    "required": true
+  },
+  {
+    "surveyId": 1,
+    "title": "Select the nature of your job.",
+    "type": "radio",
+    "required": true
+  },
+  {
+    "surveyId": 2,
+    "title": "First Question in other survey",
+    "type": "text",
+    "required": true
+  },
+  {
+    "surveyId": 2,
+    "title": "Second Question in other survey",
+    "type": "text",
+    "required": true
+  }
+]
