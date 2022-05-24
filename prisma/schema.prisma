@@ -10,13 +10,13 @@ datasource db {
 // ____> Schema
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
 
   projects Project[]
-  
+  Comment  Comment[]
 }
 
 model Project {
@@ -26,33 +26,71 @@ model Project {
   name         String
   description  String
 
-  users     User[]
-  posts     Post[]
-  workItems WorkItem[]
+  users             User[]
+  posts             Post[]
+  tasks             Task[]
+  workItems         WorkItem[]
+  ProjectInvitation ProjectInvitation[]
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  projectId Int?
-  topic     String
-  content   String
-  approved  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  project   Project? @relation(fields: [projectId], references: [id])
+  id          Int      @id @default(autoincrement())
+  projectId   Int?
+  topic       String
+  content     String
+  isImportant Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  project     Project? @relation(fields: [projectId], references: [id])
 
   workItems WorkItem[]
 }
 
 model WorkItem {
   id           Int    @id @default(autoincrement())
-  projectId    Int?
+  projectId    Int
   postId       Int?
+  taskId       Int?
   originalName String
   mimetype     String
   filename     String
   path         String
-  size         BigInt
+  size         Int
 
-  post    Post?    @relation(fields: [postId], references: [id])
-  project Project? @relation(fields: [projectId], references: [id])
+  Task    Task?   @relation(fields: [taskId], references: [id])
+  post    Post?   @relation(fields: [postId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+}
+
+model ProjectInvitation {
+  id        Int @id @default(autoincrement())
+  userId    Int
+  projectId Int
+
+  project Project @relation(fields: [projectId], references: [id])
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  projectId   Int
+  title       String
+  description String
+  status      String   @default("backlog")
+  priority    String   @default("normal")
+  createdAt   DateTime @default(now())
+
+  workItems WorkItem[]
+  comments  Comment[]
+  Project   Project    @relation(fields: [projectId], references: [id])
+
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  taskId    Int
+  authorId  Int
+  text      String
+  createdAt DateTime @default(now())
+
+  author User? @relation(fields: [authorId], references: [id])
+  task   Task? @relation(fields: [taskId], references: [id])
 }

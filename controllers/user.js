@@ -9,19 +9,19 @@ const prisma = new PrismaClient();
 
 export const get = async (req, res, next) => {
   try {
-    const studentId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id);
 
-    const student = await prisma.student.findUnique(
+    const user = await prisma.user.findUnique(
       {
-        where : {id: studentId}
+        where : {id: userId}
       }
     );
     res.status(httpCodes.ok).json({
-      student,
-      message: `Survey ${generalMessages.retrieved}`,
+      user,
+      message: "User retreived successfully!",
     });
   } catch (err) {
-    res.send(errorHandler(err));
+    next(err);
   }
 };
 
@@ -48,7 +48,7 @@ export const create = async (req, res, next) => {
     });
 
     res.status(httpCodes.ok).json({
-      user,
+      newUser,
       message: `Survey ${generalMessages.retrieved}`,
     });
 

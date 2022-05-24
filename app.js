@@ -6,10 +6,11 @@ import path, { dirname } from "path";
 import ApiError from "./utils/ApiError.js";
 
 // Routes
+import authRoutes from "./routes/auth.js"
 import userRoutes from "./routes/user.js";
 import projectRoutes from "./routes/project.js";
 import postRoutes from "./routes/post.js";
-import authRoutes from "./routes/auth.js"
+import taskRoutes from "./routes/task.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -90,6 +91,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/project", projectRoutes);
 app.use("/post", postRoutes);
+app.use("/task", taskRoutes);
 
 
 app.use((error, req, res, next) => {
