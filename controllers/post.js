@@ -1,7 +1,7 @@
 import httpCodes from "../config/httpCodes.js";
 import generalMessages from "../config/generalMessages.js";
 import errorHandler from "../utils/errorHandler.js";
-import {throwError} from "../utils/throwError.js";
+import { throwError } from "../utils/throwError.js";
 import PrismaPackage from "@prisma/client";
 
 const { PrismaClient } = PrismaPackage;
@@ -9,48 +9,55 @@ const prisma = new PrismaClient();
 
 export const create = async (req, res, next) => {
   try {
+    const { topic, content, isImportant } = req.body.data;
+    let projectId = parseInt(req.body.data.projectId);
+    // const files = req.files;
+    const userId = parseInt(req.userId);
 
-    const {topic, content} = req.body
-    let projectId = parseInt(req.body.projectId);
-    const files = req.files;
+    console.log(req.body.data);
+    console.log(userId);
 
     const post = await prisma.post.create({
       data: {
-        projectId,
+        authorId: userId,
+        projectId: projectId,
         topic,
         content,
+        isImportant,
       },
     });
 
-    if(files.length > 0){
-      const modifiedFiles = files.map(singleFile => {
-        const newfile = {
-          projectId: projectId,
-          postId: post.id,
-          originalName: singleFile.originalname,
-          mimetype: singleFile.mimetype,
-          filename: singleFile.filename,
-          path: singleFile.path,
-          size: singleFile.size
-        }
+    // let modifiedFiles;
+    // if (files.length > 0) {
+    //   modifiedFiles = files.map((singleFile) => {
+    //     const newfile = {
+    //       projectId: projectId,
+    //       postId: post.id,
+    //       originalName: singleFile.originalname,
+    //       mimetype: singleFile.mimetype,
+    //       filename: singleFile.filename,
+    //       path: singleFile.path,
+    //       size: singleFile.size,
+    //     };
 
-        return newfile;
-      })
+    //     return newfile;
+    //   });
 
-      const workitems = await prisma.workItem.createMany({
-        data: modifiedFiles
-      });
-    }
+    //   const workitems = await prisma.workItem.createMany({
+    //     data: modifiedFiles,
+    //   });
+    // }
+    console.log(post);
 
+    console.log("createing posts");
     res.status(httpCodes.ok).json({
       post,
       message: `Post created succussfully`,
     });
-
   } catch (err) {
     next(err);
   }
-}
+};
 
 export const getAllPostOfProject = async (req, res, next) => {
   try {
@@ -58,12 +65,12 @@ export const getAllPostOfProject = async (req, res, next) => {
 
     const posts = await prisma.post.findMany({
       where: {
-        projectId: projectId
+        projectId: projectId,
       },
       include: {
         workItems: true, // Include all workitems in the returned object
-      }
-    })
+      },
+    });
 
     console.log(posts);
 
@@ -71,13 +78,10 @@ export const getAllPostOfProject = async (req, res, next) => {
       posts,
       message: `Posts retreived succussfully`,
     });
-
   } catch (err) {
     next(err);
   }
-}
-
-
+};
 
 // Extra Api's
 export const get = async (req, res, next) => {
@@ -89,11 +93,11 @@ export const get = async (req, res, next) => {
         id: postId,
       },
       include: {
-        workItems: true
-      }
-    })
+        workItems: true,
+      },
+    });
 
-    if(!post){
+    if (!post) {
       throwError("Post not found!", 404);
     }
 
@@ -101,8 +105,7 @@ export const get = async (req, res, next) => {
       post,
       message: `Post retrieved succussfully!`,
     });
-
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};

@@ -17,6 +17,7 @@ model User {
 
   projects Project[]
   Comment  Comment[]
+  Post     Post[]
 }
 
 model Project {
@@ -35,12 +36,14 @@ model Project {
 
 model Post {
   id          Int      @id @default(autoincrement())
+  authorId    Int
   projectId   Int?
   topic       String
   content     String
   isImportant Boolean  @default(false)
   createdAt   DateTime @default(now())
   project     Project? @relation(fields: [projectId], references: [id])
+  author      User     @relation(fields: [authorId], references: [id])
 
   workItems WorkItem[]
 }
